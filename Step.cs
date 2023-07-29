@@ -6,7 +6,7 @@
             Farmer 0 을 선택한다.
                 PixelsPerUnit : 한 칸에 픽셀이 몇개가 들어가는지 ( 18 개로 지정 )
                 FilterMode : Point no Filter
-                Compression : 색상의 압축 방싱 ( None으로 지정 )
+                Compression : 색상의 압축 방식 ( None으로 지정 )
                 Sprite Mode : Multiple로 지정
                 SpriteEdit에 들어가서 GridByCellSize로 18 / 20으로 Padding은 1 / 1로 지정하여 자른다.
                 잘린 스프라이트의 이름을 바꿔준다.
@@ -65,6 +65,20 @@
         [c]. rigid.MovePosition(rigid.position + nextVec);
         [d]. 미끄러지듯 움직이는 것을 방지하기 위해 입력값을 받는 로직을 GetAxisRaw로 수정한다.
         [e]. 씬으로 나가서 speed 속성 값을 3으로 지정
+
+rigid.MovePosition(rigid.position + nextVec)은 현재 위치에 
+이동량(nextVec)을 더한 값을 MovePosition 함수의 인자로 전달한다. 
+이렇게 하면 현재 위치를 기준으로 움직임
+
+MovePosition 함수는 Rigidbody2D의 위치를 부드럽게 이동시키는 함수 
+하지만 이 함수는 transform.position과는 다르게 Rigidbody2D의 위치를 직접 수정하는 것이 아니라 
+Rigidbody2D의 물리 시뮬레이션에 의해 자연스럽게 이동시킨다.
+
+따라서 rigid.position + nextVec는 현재 위치에서 이동량 nextVec를 더한 최종 위치를 계산하고, 
+이 위치로 Rigidbody2D를 부드럽게 이동시키는 것, 
+이렇게 하는 이유는 물리 엔진의 움직임을 통제하고 충돌을 정확하게 처리하기 위함이다. 
+만약 Rigidbody2D의 position을 직접 수정하면 물리 시뮬레이션이 올바르게 작동하지 않을 수 있다. 
+따라서 MovePosition 함수를 사용하여 물리 시뮬레이션과 Rigidbody2D의 위치를 동기화한다.
 */
 
 /*
@@ -78,7 +92,7 @@
 
     #2. 인풋 액션 설정
         [a]. Player에게 PlayerInput 컴포넌트 추가
-        [b]. CreateActions -> Undead 폴더에 Player이름의 새 Actions 생성
+        [b]. CreateActions -> 에셋 폴더에 Player이름의 새 Actions 생성
         [c]. Move Action을 사용할 예정이다.
             Move를 펼치면 디바이스 별 키 입력이 들어 있다.
         [d]. Processors에서 Normalize Vector2를 추가한다.
@@ -94,6 +108,18 @@
         [e]. inputVec 속성에 값을 저장하도록 한다.
             inputVec = value.Get<Vector2>();
         [f]. 이미 액션 설정에서 Normalize를 추가 하였으므로 FixedUpdate()에서 작성해 두었던 normalized는 필요 없다.
+
+value.Get<Vector2>()는 InputSystem에서 입력 값을 가져오는 메서드
+
+OnMove(InputValue value) 메서드는 InputSystem의 이벤트로서, 
+플레이어의 이동 입력을 감지하는 역할을 합니다. 
+이벤트가 발생할 때, InputSystem은 플레이어가 움직이는 방향을 Vector2 형태로 value 매개변수에 담아서 호출
+value.Get<Vector2>()는 이렇게 전달된 Vector2 값을 실제로 가져와서 사용
+
+예를 들어, 플레이어가 화살표 키를 누르면 value.Get<Vector2>()는 (1, 0) 또는 (-1, 0)과 같은 
+Vector2 값을 반환하여 플레이어의 움직임 방향을 알려준다.
+이 방향 값을 이용하여 플레이어를 이동시키거나, 
+특정 방향으로 공격을 발사하는 등의 동작을 수행한다.
 */
 
 /*
@@ -119,7 +145,7 @@
     #3. 애니메이터 설정
         [a]. Default 상태를 Stand_Player0으로 지정한다.
         [b]. 애니메이터에 있는 상태 이름을 Stand, Run, Dead로 명명
-        [c]. Dead는 AniState 위로 옮기고 연결한다.
+        [c]. Dead는 AnyState 위로 옮기고 연결한다.
             Dead에서 Exit는 연결하지 않는다.
         [d]. Stand와 Run을 서로 연결한다.
         [e]. 파라미터를 추가한다.
@@ -148,6 +174,15 @@
             Override에 해당 애니메이션 클립을 부착한다.
         [f]. 테스트를 위해 Player객체를 복사한다.
             스프라이트는 수정할 필요가 없고 애니메이터 컨트롤러만 바꿔준다.
+
+Animator Override Controller(애니메이터 오버라이드 컨트롤러)는 Unity의 Animator 
+컴포넌트에서 사용되는 스크립트 기반의 오버라이딩 시스템이다. 
+이 컨트롤러는 기존에 Animator 컴포넌트에 연결된 Animator Controller의 일부 애니메이션 클립을 
+런타임에 다른 애니메이션 클립으로 바꾸는 데 사용된다.
+
+주로 캐릭터나 적 캐릭터 등에 사용자 정의 애니메이션을 적용할 때 유용 
+예를 들어, 여러 캐릭터에 같은 Animator Controller를 사용하되, 
+캐릭터마다 다른 애니메이션을 적용하고 싶을 때 Animator Override Controller를 사용한다.
 */
 
 /*
