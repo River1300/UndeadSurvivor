@@ -2,3 +2,6 @@ Step.cs.meta
 Player.cs.meta
 GameManager.cs.meta
 Reposition.cs.meta
+Enemy.cs.meta
+PoolManager.cs.meta
+Spawner.cs.meta

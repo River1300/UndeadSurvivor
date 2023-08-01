@@ -20,6 +20,11 @@ public class Enemy : MonoBehaviour
         isLive = true;
     }
 
+    void OnEnable()
+    {
+        target = GameManager.instance.player.GetComponent<Rigidbody2D>();
+    }
+
     void FixedUpdate()
     {
         if(!isLive) return;
