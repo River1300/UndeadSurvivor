@@ -136,9 +136,9 @@ Vector2 값을 반환하여 플레이어의 움직임 방향을 알려준다.
     #2. 셀 애니메이션
         [a]. 셀 애니메이션이란 여러 장의 이미지를 순차적으로 보여주는 방식을 뜻한다.
         [b]. Run 0 ~ Run 5를 모두 선택한 상태로 Player객체에 넣어 준다.
-        [c]. Animations 폴더에 Run_Player0 anim이라는 이름을 만든다.
+        [c]. Animations 폴더에 Run_Player0이라는 이름을 만든다.
         [d]. Stand 0 ~ Stand 3 모두 선택한 상태로 Player객체에 넣어 준다.
-        [e]. Animations 폴더에 Stand_Player0 anim이라는 이름으로 만든다.
+        [e]. Animations 폴더에 Stand_Player0이라는 이름으로 만든다.
         [f]. Dead 0 ~ Dead 1도 마찬가지...
         [g]. 애니메이션 컨트롤러의 이름을 AcPlayer로 명명
 
@@ -279,6 +279,37 @@ Animator Override Controller(애니메이터 오버라이드 컨트롤러)는 Un
 x 축 거리가 음수일 경우 : 플레이어가 맵의 중심보다 왼쪽에 있다.
 y 축 거리가 음수일 경우 : 플에이어가 맵의 중심보다 아래에 있다.
 x 축 거리와 y 축 거리의 절대 값을 구하여 거리의 값이 더 큰 축으로 맵을 이동 시킨다.
+
+Cinemachine은 Unity에서 제공하는 고급 카메라 시스템 패키지로, 
+게임 또는 애니메이션 등에서 카메라 워크플로우를 향상시켜주는 도구다. 
+기존에 사용되던 카메라 컴포넌트의 한계를 극복하고, 
+다양한 기능과 설정을 통해 다양한 카메라 워크플로우를 만들 수 있도록 지원한다. 
+Cinemachine을 사용하면 프로시저럴 애니메이션(Procedural Animation)과 
+카메라 래깅(Camera Rigs)을 구성할 수 있어, 
+다이나믹하게 카메라를 제어하고 다양한 시각적 효과를 구현할 수 있습니다.
+
+FreeLook: 마우스 및 조이스틱 입력으로 자유로운 시점변경과 추적 기능을 제공하는 카메라 래깅
+Virtual Camera: 다양한 카메라 추적 기능을 지원하는 가상 카메라로, 
+    스크립트를 통해 카메라를 동적으로 제어
+ClearShot: 가상 카메라 간의 시점 전환을 자동화하여 플레이어 또는
+    특정 대상을 적절하게 추적하도록 도와주는 기능
+Blend: 여러 개의 가상 카메라를 부드럽게 전환하거나 혼합하여 사용할 수 있는 기능
+Noise: 카메라에 노이즈를 추가하여 씬에 더욱 현실적인 느낌을 부여하는 기능
+Path: 지정한 경로를 따라 카메라를 움직이도록 지원하는 카메라 래깅
+Impulse: 충돌 등의 사건에 대응하여 카메라 흔들림 효과를 구현하는 기능
+
+Follow: 카메라를 지정된 대상 오브젝트를 따라 이동시키는 기능이다. 
+    카메라가 대상을 자동으로 추적하여 따라가게 만들어준다.
+Follow 옵션: 가상 카메라가 대상을 따라가는 속도와 거리를 조절하는 옵션 
+    Follow 옵션을 설정하여 카메라가 대상에게 빠르게 따라가거나 멀리 떨어져 있을 수 있다.
+LookAt: LookAt 기능은 카메라가 지정된 대상 오브젝트를 바라보도록 하는 기능 
+    카메라가 항상 대상을 바라보게 된다.
+LookAt 옵션: LookAt 옵션을 설정하여 카메라가 대상을 바라볼 때 얼마나 빠르게 회전할지, 
+    어떤 축을 기준으로 회전할지 등을 조절할 수 있다. 
+    이를 통해 카메라가 대상을 따라가면서 항상 바라보게 됩니다.
+    예를 들어, Follow와 LookAt을 모두 사용하여 플레이어를 따라가면서 
+        항상 플레이어를 바라보는 카메라를 만들 수 있다. 
+        이러한 카메라 설정을 통해 플레이어를 중심으로 한 쾌적하고 자연스러운 시점을 구현
 */
 
 /*
@@ -345,6 +376,30 @@ x 축 거리와 y 축 거리의 절대 값을 구하여 거리의 값이 더 큰
                 Awake() 함수에서 초기화 한다.
         [d]. 몬스터에게 Reposition 스크립트를 부착한다.
         [e]. 몬스터에게 Enemy 태그를 부착한다.
+    
+Transform의 Translate 메서드는 게임 오브젝트의 위치를 이동시키는 함수다. 
+이 메서드는 게임 오브젝트의 현재 위치를 기준으로 원하는 만큼 이동할 수 있도록 해준다.
+
+public void Translate(Vector3 translation);
+public void Translate(Vector3 translation, Space relativeTo);
+public void Translate(float x, float y, float z);
+
+public void Translate(Vector3 translation);
+게임 오브젝트의 현재 위치를 기준으로 지정된 방향과 거리만큼 이동 
+translation 매개변수는 이동할 방향과 거리를 나타내는 Vector3 값 
+예를 들어, Vector3(1, 0, 0)을 전달하면 오브젝트가 x축의 양의 방향으로 1만큼 이동한다.
+
+public void Translate(Vector3 translation, Space relativeTo);
+지정된 Space(공간)에 따라 이동 
+relativeTo 매개변수에는 Space.World 또는 Space.Self를 지정할 수 있다.
+    Space.World: 이동 방향과 거리를 월드 공간(전역 좌표계) 기준으로 지정
+        즉, 게임 오브젝트의 현재 회전과 위치에 상관없이 항상 동일한 방향과 거리로 이동한다.
+    Space.Self: 이동 방향과 거리를 로컬 공간(로컬 좌표계) 기준으로 지정 
+        즉, 게임 오브젝트의 현재 회전에 따라 이동 방향과 거리가 변한다.
+
+public void Translate(float x, float y, float z);
+x, y, z 좌표 축 별로 이동할 거리를 개별적으로 지정 
+예를 들어, Translate(1, 0, 0)을 호출하면 게임 오브젝트가 x축의 양의 방향으로 1만큼 이동
 */
 
 /*

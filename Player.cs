@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 {
     public float speed;
 
-    public Vector2 inputVec;
+    Vector2 inputVec;
 
     Rigidbody2D rigid;
     Animator anim;
