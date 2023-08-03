@@ -633,7 +633,8 @@ C#에서는 직렬화를 구현하기 위해 [System.Serializable] 어트리뷰�
     #4. 근접 무기 배치2
         [a]. 샆 프리팹을 Weapon 0의 자식으로 등록하고 y 축을 1.5
             복사한뒤 z축 회전을 180, 위치 y축을 -1.5f로 지정, 두 개 더 복사 하여 9시와 3시
-            12시 -> 9시 -> 6시 -> 3시 순으로 배치
+            12시 -> 9시 -> 6시 -> 3시 순으로 배치하여 샆의 위치를 구상한다.
+            먼저 방향을 360으로 나눈 뒤에 y축 +를 하여 위치를 잡는다.
         [b]. Weapon 스크립트의 Batch() 함수로 가서 샆의 위치를 지정해 준다.
             회전을 위해 회전 벡터를 지역 변수로 만든다. 360도를 기준으로 갯수에 따라 각도가 정해진다.
                 Vector3 rotVec = Vector3.forward * 360 * index / count;
@@ -659,6 +660,23 @@ C#에서는 직렬화를 구현하기 위해 [System.Serializable] 어트리뷰�
                 if(index < transform.childCount)
             이미 만들어 둔 자식이 있다면 자식을 활용한다.
                 bullet = transform.GetChild(index);
+
+Transform은 게임 오브젝트의 위치, 회전, 스케일 등의 변환 정보를 가지고 있는 컴포넌트다.
+GameObject는 실제로 씬에 존재하는 게임 오브젝트를 나타내는 클래스이고, 
+Transform은 해당 게임 오브젝트의 변환 정보를 담고 있다.
+
+오브젝트 풀 매니저에서 Get(prefabId) 메서드를 호출하여 오브젝트를 가져올 때, 
+반환값은 해당 오브젝트의 GameObject다. 
+따라서 Transform bullet = GameManager.instance.pool.Get(prefabId).transform;에서 
+.transform을 사용하여 GameObject에서 Transform 컴포넌트만을 얻어 온다.
+
+이렇게 Transform으로 받아오는 이유는 오브젝트 풀 매니저에서 가져온 오브젝트를 사용할 때, 
+주로 위치나 회전 등의 변환 정보를 변경해야 할 때가 있는데, 
+Transform을 사용하면 더 직관적이고 편리하게 오브젝트의 변환 정보를 조작할 수 있다.
+
+만약 GameObject를 사용한다면, 위치를 변경하려면 transform.position을 사용해야 하고, 
+회전을 변경하려면 transform.rotation을 사용해야 한다. 
+하지만 Transform을 사용하면 바로 transform 객체를 이용하여 변환 정보를 조작할 수 있다.
 */
 
 /*

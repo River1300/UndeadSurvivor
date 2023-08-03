@@ -22,8 +22,6 @@ public class Enemy : MonoBehaviour
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
-
-        isLive = true;
     }
 
     void OnEnable()
@@ -57,5 +55,26 @@ public class Enemy : MonoBehaviour
         speed = data.speed;
         maxHealth = data.health;
         health = data.health;
+    }
+
+    void Dead()
+    {
+        gameObject.SetActive(false);
+    }
+
+    void OnTriggerEnter2D(Collider2D other)
+    {
+        if(!other.CompareTag("Bullet")) return;
+
+        health -= other.GetComponent<Bullet>().damage;
+
+        if(health > 0)
+        {
+
+        }
+        else
+        {
+            Dead();
+        }
     }
 }
