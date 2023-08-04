@@ -767,6 +767,12 @@ Transform을 사용하면 더 직관적이고 편리하게 오브젝트의 변�
             bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);
         [j]. 만들어진 총알을 초기화 시킨다.
             bullet.GetComponent<Bullet>().Init(damage, count, dir);
+
+Quaternion.FromToRotation() 함수는 두 벡터 사이의 회전을 나타내는 쿼터니온(quaternion)을 계산하는 메서드다. 
+이 함수는 주로 두 벡터 사이의 회전을 구할 때 사용된다.
+    fromDirection: 회전을 시작하는 방향 벡터
+    toDirection: 회전을 끝내는 방향 벡터
+fromDirection에서 toDirection으로 회전하는 데 필요한 쿼터니온을 반환한다.
 */
 
 /*

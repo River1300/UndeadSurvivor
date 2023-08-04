@@ -4,24 +4,31 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public RuntimeAnimatorController[] animCon;
-    public Rigidbody2D target;
-
+    [Header("----- Enemy Info -----")]
     public float maxHealth;
     public float health;
     public float speed;
-
     bool isLive;
+    
+    [Header("----- Game Object -----")]
+    public Rigidbody2D target;
 
+    [Header("----- Component -----")]
+    public RuntimeAnimatorController[] animCon;
     Rigidbody2D rigid;
     Animator anim;
+    Collider2D coll;
     SpriteRenderer spriteRenderer;
+    WaitForFixedUpdate wait;
     
     void Awake()
     {
         rigid = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        coll = GetComponent<Collider2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+
+        wait = new WaitForFixedUpdate();
     }
 
     void OnEnable()
@@ -29,12 +36,17 @@ public class Enemy : MonoBehaviour
         target = GameManager.instance.player.GetComponent<Rigidbody2D>();
 
         isLive = true;
+        coll.enabled = true;
+        rigid.simulated = true;
+        spriteRenderer.sortingOrder = 2;
+        anim.SetBool("Dead", false);
+
         health = maxHealth;
     }
 
     void FixedUpdate()
     {
-        if(!isLive) return;
+        if(!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("Hit")) return;
 
         Vector2 dirVec = target.position - rigid.position;
         Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime;
@@ -62,19 +74,37 @@ public class Enemy : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    IEnumerator KnockBack()
+    {
+        yield return wait;
+
+        Vector3 playerPos = GameManager.instance.player.transform.position;
+        Vector3 dirVec = transform.position - playerPos;
+        rigid.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
+    }
+
     void OnTriggerEnter2D(Collider2D other)
     {
         if(!other.CompareTag("Bullet")) return;
+        if(!isLive) return;
 
         health -= other.GetComponent<Bullet>().damage;
+        StartCoroutine(KnockBack());
 
         if(health > 0)
         {
-
+            anim.SetTrigger("Hit");
         }
         else
         {
-            Dead();
+            isLive = false;
+            coll.enabled = false;
+            rigid.simulated = false;
+            spriteRenderer.sortingOrder = 1;
+            anim.SetBool("Dead", true);
+            
+            GameManager.instance.kill++;
+            GameManager.instance.GetExp();
         }
     }
 }
