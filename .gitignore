@@ -10,3 +10,6 @@ Scanner.cs.meta
 Weapon.cs.meta
 Follow.cs.meta
 HUD.cs.meta
+Gear.cs.meta
+Item.cs.meta
+ItemData.cs.meta
