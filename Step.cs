@@ -863,7 +863,7 @@ fromDirection에서 toDirection으로 회전하는 데 필요한 쿼터니온을
         [c]. 열거형 속성을 추가한다.
             public enum InfoType { Exp, Level, Kill, Time, Health }
             public InfoType type;
-        [d]. UI를 받을 텍스트와 슬라이트 속성을 추가한다.
+        [d]. UI를 받을 텍스트와 슬라이드 속성을 추가한다.
             네임 스페이스를 먼저 추가 한다.
                 using UnityEngine.UI;
             Text myText; Slider mySlider;
@@ -962,6 +962,14 @@ fromDirection에서 toDirection으로 회전하는 데 필요한 쿼터니온을
             FixedUpdate()에서 플레이어를 따라다닌다.
         [j]. 월드와 스크린 좌표계가 다르므로 카메라를 가져와서 월드의 좌표계를 스크린 좌표계로 변환해 준다.
             rect.position = Camera.main.WorldToScreenPoint(GamaManager.instance.player.transform.position);
+
+Camera.main.WorldToScreenPoint() 메서드는 월드 좌표를 스크린 좌표로 변환하는 함수 
+이 함수를 사용하면 3D 공간의 오브젝트 위치를 스크린 좌표로 변환하여 화면에 그릴 수 있다.
+
+Camera.main.WorldToScreenPoint(Vector3 position) 메서드는 주어진 position의 월드 좌표를 
+현재 활성화된 메인 카메라의 스크린 좌표로 변환한다.
+이 때 스크린 좌표는 Vector3 형태로 반환되고 스크린 좌표의 x, y 값은 
+픽셀 단위로 화면의 위치를 나타내며, z 값은 카메라로부터의 깊이를 나타낸다.
 */
 
 /*

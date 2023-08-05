@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour
     public int level;
     public int kill;
     public int exp;
+    public int maxHealth;
+    public int health;
     
     [Header("----- Game Object -----")]
     public static GameManager instance;
@@ -22,6 +24,11 @@ public class GameManager : MonoBehaviour
     void Awake()
     {
         instance = this;
+    }
+
+    void Start()
+    {
+        health = maxHealth;
     }
 
     void Update()
