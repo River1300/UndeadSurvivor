@@ -11,7 +11,7 @@ public class Player : MonoBehaviour
 
     Rigidbody2D rigid;
     Animator anim;
-    SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer;
     public Scanner scanner;
 
     void Awake()

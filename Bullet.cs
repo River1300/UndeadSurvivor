@@ -15,6 +15,11 @@ public class Bullet : MonoBehaviour
             rigid = GetComponent<Rigidbody2D>();
     }
 
+    void Update()
+    {
+        Invoke("DeActivated", 3.0f);
+    }
+
     public void Init(float damage, int per, Vector3 dir)
     {
         this.per = per;
@@ -24,6 +29,11 @@ public class Bullet : MonoBehaviour
         {
             rigid.velocity = dir * 10.0f;
         }
+    }
+
+    void DeActivated()
+    {
+        gameObject.SetActive(false);
     }
 
     void OnTriggerEnter2D(Collider2D other)

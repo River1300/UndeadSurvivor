@@ -25,6 +25,20 @@ public class Gear : MonoBehaviour
         ApplyGear();
     }
 
+    void ApplyGear()
+    {
+        switch(type)
+        {
+        case ItemData.ItemType.Glove:
+            RateUp();
+            break;
+
+        case ItemData.ItemType.Shoe:
+            SpeedUp();
+            break;
+        }
+    }
+
     void RateUp()
     {
         Weapon[] weapons = transform.parent.GetComponentsInChildren<Weapon>();
@@ -34,7 +48,6 @@ public class Gear : MonoBehaviour
             switch(weapon.id)
             {
             case 0:
-
                 break;
 
             default:
@@ -48,19 +61,5 @@ public class Gear : MonoBehaviour
         float speed = 3.0f;
 
         GameManager.instance.player.speed = speed + speed * rate;
-    }
-
-    void ApplyGear()
-    {
-        switch(type)
-        {
-        case ItemData.ItemType.Glove:
-            RateUp();
-            break;
-
-        case ItemData.ItemType.Shoe:
-            SpeedUp();
-            break;
-        }
     }
 }

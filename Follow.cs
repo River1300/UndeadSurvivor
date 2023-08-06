@@ -15,6 +15,6 @@ public class Follow : MonoBehaviour
     void FixedUpdate()
     {
         rect.position = Camera.main.WorldToScreenPoint(
-            GameManager.instance.player.transform.position);
+            GameManager.instance.player.transform.position + Vector3.down * 0.8f);
     }
 }

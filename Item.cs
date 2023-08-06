@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// #. Item
+//  ItemData를 받아서 플레이어가 착용한 아이템의 상태를 HUD로 표시하는 역할
+//  ItemData를 받아서 플레이어가 획득한 아이템을 Weapon || Gear 클래스에게 알려주는 역할
+//  ItemData를 받아서 플레이어가 착용한 아이템의 레벨업을 Weapon || Gear 클래스에게 알려주는 역할
+//  ItemData를 받아서 아이템이 레벨업 할 때 속성의 변화 값을 정해주는 역할
 public class Item : MonoBehaviour
 {
     public ItemData data;
