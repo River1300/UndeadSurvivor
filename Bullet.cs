@@ -15,9 +15,10 @@ public class Bullet : MonoBehaviour
             rigid = GetComponent<Rigidbody2D>();
     }
 
-    void Update()
+    void LateUpdate()
     {
-        Invoke("DeActivated", 3.0f);
+        if(per >= 0)
+            Invoke("DeActivated", 3.0f);
     }
 
     public void Init(float damage, int per, Vector3 dir)
@@ -44,6 +45,7 @@ public class Bullet : MonoBehaviour
         if(per < 0)
         {
             rigid.velocity = Vector2.zero;
+            CancelInvoke("DeActivated");
             gameObject.SetActive(false);
         }
     }

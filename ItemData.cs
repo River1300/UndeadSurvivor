@@ -17,6 +17,7 @@ public class ItemData : ScriptableObject
     public string itemName;
     public string itemDesc;
     public Sprite itemIcon;
+    public Sprite hand;
     
     [Header("----- Level Data -----")]
     public float baseDamage;

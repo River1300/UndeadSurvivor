@@ -1185,7 +1185,7 @@ ItemData -> Item --> Weapon --> Bullet
             public bool isLeft;
         [c]. 스프라이트 렌더러, 플레이어의 스프라이트 렌더러를 속성으로 갖는다.
         [d]. Awake() 함수에서 플레이어 스프라이트를 초기화 한다.
-            player.GetComponentsInParent<SpriteRenderer>()[1];
+            player = GetComponentsInParent<SpriteRenderer>()[1];
         [e]. 왼손은 방향, 오른손은 위치에 대한 정보를 속성으로 저장한다.
             Vector3 rightPos = new Vector3(0,34f, -0.15f, 0);
             Vector3 rightPosReverse = new Vector3(-0.15f, -0.15, 0);

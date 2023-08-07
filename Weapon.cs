@@ -119,7 +119,7 @@ public class Weapon : MonoBehaviour
             break;
 
         case 1:
-            speed = 0.3f;
+            speed = 0.5f;
             break;
 
         case 5:
@@ -136,6 +136,10 @@ public class Weapon : MonoBehaviour
             speed = 20.0f;
             break;
         }
+
+        Hand hand = player.hands[(int)data.itemType];
+        hand.spriteRenderer.sprite = data.hand;
+        hand.gameObject.SetActive(true);
 
         player.BroadcastMessage("ApplyGear", SendMessageOptions.DontRequireReceiver);
     }

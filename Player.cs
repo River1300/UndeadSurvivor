@@ -13,6 +13,7 @@ public class Player : MonoBehaviour
     Animator anim;
     public SpriteRenderer spriteRenderer;
     public Scanner scanner;
+    public Hand[] hands;
 
     void Awake()
     {
@@ -20,6 +21,7 @@ public class Player : MonoBehaviour
         anim = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         scanner = GetComponent<Scanner>();
+        hands = GetComponentsInChildren<Hand>(true);
     }
 
     void FixedUpdate()
