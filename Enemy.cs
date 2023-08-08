@@ -46,12 +46,15 @@ public class Enemy : MonoBehaviour
 
     void FixedUpdate()
     {
-        if(!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("Hit")) return;
+        if(GameManager.instance.isLive)
+        {
+            if(!isLive || anim.GetCurrentAnimatorStateInfo(0).IsName("Hit")) return;
 
-        Vector2 dirVec = target.position - rigid.position;
-        Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime;
-        rigid.MovePosition(rigid.position + nextVec);
-        rigid.velocity = Vector2.zero;
+            Vector2 dirVec = target.position - rigid.position;
+            Vector2 nextVec = dirVec.normalized * speed * Time.fixedDeltaTime;
+            rigid.MovePosition(rigid.position + nextVec);
+            rigid.velocity = Vector2.zero;
+        }
     }
 
     void LateUpdate()
