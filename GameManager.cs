@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -14,24 +15,20 @@ public class GameManager : MonoBehaviour
     public int level;
     public int kill;
     public int exp;
-    public int maxHealth;
-    public int health;
+    public float maxHealth;
+    public float health;
     
     [Header("----- Game Object -----")]
     public static GameManager instance;
     public PoolManager pool;
     public Player player;
     public LevelUp uiLevelUp;
+    public Result uiResult;
+    public GameObject nuclear;
 
     void Awake()
     {
         instance = this;
-    }
-
-    void Start()
-    {
-        health = maxHealth;
-        uiLevelUp.Select(0);
     }
 
     void Update()
@@ -43,12 +40,38 @@ public class GameManager : MonoBehaviour
             if(gameTime > maxGameTime)
             {
                 gameTime = maxGameTime;
+                GameVictory();
             }
         }
     }
 
+    public void GameStart()
+    {
+        isLive = true;
+        health = maxHealth;
+        uiLevelUp.Select(0);
+        Resume();
+    }
+
+    public void GameVictory()
+    {
+        StartCoroutine(GameVictoryRoutine());
+    }
+
+    public void GameRetry()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void GameOver()
+    {
+        StartCoroutine(GameOverRoutine());
+    }
+
     public void GetExp()
     {
+        if(!isLive) return;
+
         exp++;
 
         if(exp == nextExp[Mathf.Min(level, nextExp.Length - 1)])
@@ -69,5 +92,25 @@ public class GameManager : MonoBehaviour
     {
         isLive = true;
         Time.timeScale = 1;
+    }
+
+    IEnumerator GameVictoryRoutine()
+    {
+        isLive = false;
+        nuclear.SetActive(true);
+        yield return new WaitForSeconds(0.5f);
+        nuclear.SetActive(false);
+        uiResult.gameObject.SetActive(true);
+        uiResult.Win();
+        Stop();
+    }
+
+    IEnumerator GameOverRoutine()
+    {
+        isLive = false;
+        yield return new WaitForSeconds(0.5f);
+        uiResult.gameObject.SetActive(true);
+        uiResult.Lose();
+        Stop();
     }
 }
