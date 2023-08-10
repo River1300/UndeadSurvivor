@@ -14,6 +14,7 @@ public class Player : MonoBehaviour
     public SpriteRenderer spriteRenderer;
     public Scanner scanner;
     public Hand[] hands;
+    public RuntimeAnimatorController[] animCon;
 
     void Awake()
     {
@@ -22,6 +23,12 @@ public class Player : MonoBehaviour
         spriteRenderer = GetComponent<SpriteRenderer>();
         scanner = GetComponent<Scanner>();
         hands = GetComponentsInChildren<Hand>(true);
+    }
+
+    void OnEnable()
+    {
+        anim.runtimeAnimatorController = animCon[GameManager.instance.playerID];
+        speed *= Character.Speed;
     }
 
     void FixedUpdate()
@@ -49,12 +56,11 @@ public class Player : MonoBehaviour
         inputVec = value.Get<Vector2>();
     }
 
-    void OnTriggerEnter2D(Collider2D other)
+    void OnCollisionStay2D(Collision2D other)
     {
         if(!GameManager.instance.isLive) return;
 
-        if(other.CompareTag("Enemy"))
-            GameManager.instance.health -= Time.deltaTime * 10;
+        GameManager.instance.health -= Time.deltaTime * 10;
 
         if(GameManager.instance.health <= 0)
         {

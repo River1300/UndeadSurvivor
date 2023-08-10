@@ -1549,6 +1549,12 @@ ItemData -> Item --> Weapon --> Bullet
             damage = data.baseDamage * Character.Damage;
             count = data.baseCount + Character.Count;
             LevelUp 함수에서 레벨업 할 때도 보정 값을 적용 한다.
+
+// 1. 게임 매니저의 GameStart 버튼으로 게임을 시작
+// 2. GameStart 버튼을 4개로 나누어 다른 캐릭터 + 시작 무기를 활성화
+// 3. GameStart의 매개변수로 캐릭터 ID 를 받아서 속성으로 저장
+// 4. 플레이어가 활성활 될 때 runtimeAnimatorController에 게임 매니저의 캐릭터 ID 를 전달
+// 5. 에디터에서 GameStart 버튼에 Item 오브젝트의 OnClick 함수를 연결
 */
 
 /*

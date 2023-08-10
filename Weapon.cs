@@ -101,7 +101,7 @@ public class Weapon : MonoBehaviour
         transform.localPosition = Vector3.zero; // 1. 플레이어 오브젝트의 자식으로 무기를 등록
 
         id = data.itemId;   // 2. 무기의 id를 등록
-        damage = data.baseDamage;
+        damage = data.baseDamage + Character.WeaponDamage;
         count = data.baseCount; // 3. 이 무기의 기본 데미지와 (갯수 || 관통력) 등록
 
         for(int i = 0; i < GameManager.instance.pool.prefabs.Length; i++)
@@ -116,12 +116,12 @@ public class Weapon : MonoBehaviour
         switch(id)  // 5. 무기의 id에 따라 (회전 속도 || 연사 속도) 를 지정
         {
         case 0:
-            speed = 150.0f;
+            speed = 150.0f * Character.WeaponSpeed;
             BatchOne();
             break;
 
         case 1:
-            speed = 0.5f;
+            speed = 0.5f * Character.WeaponRate;
             break;
 
         case 5:
@@ -148,7 +148,7 @@ public class Weapon : MonoBehaviour
 
     public void LevelUp(float damage, int count)    // #4. 업그레이드
     {
-        this.damage = damage;
+        this.damage = damage + Character.WeaponDamage;
         this.count += count;    // 1. Item 클래스가 전달해준 값으로 데미지와 (갯수 || 관통력) 을 증가
 
         if(id == 0)
