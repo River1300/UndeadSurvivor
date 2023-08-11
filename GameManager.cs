@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
         playerID = id;
         isLive = true;
         health = maxHealth;
-        uiLevelUp.Select(playerID % 2);
+        uiLevelUp.Select(playerID % 2); // 기본 무기를 지급
         player.gameObject.SetActive(true);
         Resume();
     }

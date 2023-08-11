@@ -1621,7 +1621,7 @@ ItemData -> Item --> Weapon --> Bullet
             switch문으로 매개변수로 전달받은 업적에 따라 다른 로직을 실행 한다.
                 isAchive = GameManager.instance.kill >= 10;
                 isAchive = GameManager.instance.gameTime == GameManager.instance.maxGameTime;
-        [e]. 지역 변수가 true를 저장하고 PlayerPrefs에  전달 받은 매개 변수가 아직 해금되지 않았다면 업적 해금을 저장한다.
+        [e]. 지역 변수가 true를 저장하고 PlayerPrefs에 전달 받은 매개 변수가 아직 해금되지 않았다면 업적 해금을 저장한다.
             if(isAchive && PlayerPrefs.GetInt(achive.ToString()) == 0)
 
     #4. 해금 알려주기
