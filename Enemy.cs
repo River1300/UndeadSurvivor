@@ -84,6 +84,8 @@ public class Enemy : MonoBehaviour
         Vector3 playerPos = GameManager.instance.player.transform.position;
         Vector3 dirVec = transform.position - playerPos;
         rigid.AddForce(dirVec.normalized * 3, ForceMode2D.Impulse);
+
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Hit);
     }
 
     void OnTriggerEnter2D(Collider2D other)
@@ -105,7 +107,12 @@ public class Enemy : MonoBehaviour
             rigid.simulated = false;
             spriteRenderer.sortingOrder = 1;
             anim.SetBool("Dead", true);
+
+            if(GameManager.instance.isLive)
+                AudioManager.instance.PlaySfx(AudioManager.Sfx.Dead);
             
+            Invoke("Dead", 1.0f);
+
             GameManager.instance.kill++;
             GameManager.instance.GetExp();
         }

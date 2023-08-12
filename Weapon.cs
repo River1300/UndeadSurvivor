@@ -241,6 +241,8 @@ public class Weapon : MonoBehaviour
         bullet.position = transform.position;
         bullet.rotation = Quaternion.FromToRotation(Vector3.up, dir);   // 3. 적을 향해 발사
         
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Range);
+
         bullet.GetComponent<Bullet>().Init(damage, count, dir);
     }
 

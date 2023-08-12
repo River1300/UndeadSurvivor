@@ -53,6 +53,10 @@ public class GameManager : MonoBehaviour
         health = maxHealth;
         uiLevelUp.Select(playerID % 2); // 기본 무기를 지급
         player.gameObject.SetActive(true);
+        
+        AudioManager.instance.PlayBgm(isLive);
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select);
+
         Resume();
     }
 
@@ -89,18 +93,25 @@ public class GameManager : MonoBehaviour
     {
         isLive = false;
         Time.timeScale = 0;
+
+        AudioManager.instance.PlayBgm(isLive);
     }
 
     public void Resume()
     {
         isLive = true;
         Time.timeScale = 1;
+
+        AudioManager.instance.PlayBgm(isLive);
     }
 
     IEnumerator GameVictoryRoutine()
     {
         isLive = false;
         nuclear.SetActive(true);
+
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Win);
+
         yield return new WaitForSeconds(0.5f);
         nuclear.SetActive(false);
         uiResult.gameObject.SetActive(true);
@@ -111,6 +122,9 @@ public class GameManager : MonoBehaviour
     IEnumerator GameOverRoutine()
     {
         isLive = false;
+
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Lose);
+
         yield return new WaitForSeconds(0.5f);
         uiResult.gameObject.SetActive(true);
         uiResult.Lose();

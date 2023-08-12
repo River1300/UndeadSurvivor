@@ -49,6 +49,9 @@ public class LevelUp : MonoBehaviour
 
     public void Show()
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.LevelUp);
+        AudioManager.instance.EffectBgm(true);
+
         Next();
         rect.localScale = Vector3.one;
 
@@ -57,6 +60,8 @@ public class LevelUp : MonoBehaviour
 
     public void Hide()
     {
+        AudioManager.instance.EffectBgm(false);
+
         rect.localScale = Vector3.zero;
 
         GameManager.instance.Resume();
@@ -64,6 +69,8 @@ public class LevelUp : MonoBehaviour
 
     public void Select(int index)
     {
+        AudioManager.instance.PlaySfx(AudioManager.Sfx.Select);
+
         items[index].OnClick();
     }
 }
