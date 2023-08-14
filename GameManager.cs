@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
@@ -11,6 +12,7 @@ public class GameManager : MonoBehaviour
     public float gameTime;
     public bool isLive;
     public int playerID;
+    float weightSpeed = 1.3f;
 
     [Header("----- Player Info -----")]
     public int level;
@@ -26,10 +28,14 @@ public class GameManager : MonoBehaviour
     public LevelUp uiLevelUp;
     public Result uiResult;
     public GameObject nuclear;
+    public Transform uiJoy;
+    public Volume volume;
 
     void Awake()
     {
         instance = this;
+
+        Application.targetFrameRate = 60;
     }
 
     void Update()
@@ -37,6 +43,8 @@ public class GameManager : MonoBehaviour
         if(isLive)
         {
             gameTime += Time.deltaTime;
+
+            volume.weight = Mathf.Clamp01(gameTime / maxGameTime * weightSpeed);
 
             if(gameTime > maxGameTime)
             {
@@ -93,6 +101,7 @@ public class GameManager : MonoBehaviour
     {
         isLive = false;
         Time.timeScale = 0;
+        uiJoy.localScale = Vector3.zero;
 
         AudioManager.instance.PlayBgm(isLive);
     }
@@ -101,8 +110,14 @@ public class GameManager : MonoBehaviour
     {
         isLive = true;
         Time.timeScale = 1;
+        uiJoy.localScale = Vector3.one;
 
         AudioManager.instance.PlayBgm(isLive);
+    }
+
+    public void Exit()
+    {
+        Application.Quit();
     }
 
     IEnumerator GameVictoryRoutine()
