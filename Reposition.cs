@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. Reposition 클래스 : 맵과 몬스터에 부착되어 플레이어의 이동에 따라 위치를 재조정해주는 역할
 public class Reposition : MonoBehaviour
 {
     Collider2D coll;
@@ -13,6 +14,7 @@ public class Reposition : MonoBehaviour
 
     void OnTriggerExit2D(Collider2D other)
     {
+// #. 플레이어의 자식으로 있는 Area 콜라이더를 벗어났을 때 위치 재조정을 실행
         if(!other.CompareTag("Area")) return;
 
         Vector3 playerPos = GameManager.instance.player.transform.position;

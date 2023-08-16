@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. Gear 클래스 : 보조 아이템 능력 정의
 public class Gear : MonoBehaviour
 {
     public ItemData.ItemType type;
@@ -9,13 +10,14 @@ public class Gear : MonoBehaviour
 
     public void Init(ItemData data)
     {
+// #. 사용자가 보조 아이템을 선택했을 때 보조 아이템의 속성을 받아와서 배정
         name = "Gear " + data.itemId;
         transform.parent = GameManager.instance.player.transform;
         transform.localPosition = Vector3.zero;
 
         type = data.itemType;
         rate = data.damages[0];
-
+// #. 보조 아이템 타입에 맞게 능력치 보정
         ApplyGear();
     }
 

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// #. LevelUp 클래스 : 업그레이드 항목을 나열하고 선택된 항목을 Item 클래스에게 전달하는 역할
 public class LevelUp : MonoBehaviour
 {
+    public GameObject healthBar;
     RectTransform rect;
     Item[] items;
 
@@ -49,12 +51,14 @@ public class LevelUp : MonoBehaviour
 
     public void Show()
     {
+// #. GameManager 클래스에서 레벨업을 할 때 호출
         AudioManager.instance.PlaySfx(AudioManager.Sfx.LevelUp);
         AudioManager.instance.EffectBgm(true);
 
         Next();
+        healthBar.SetActive(false);
         rect.localScale = Vector3.one;
-
+// #. 업그레이드 항목을 선택 중에는 게임을 정지
         GameManager.instance.Stop();
     }
 
@@ -62,8 +66,9 @@ public class LevelUp : MonoBehaviour
     {
         AudioManager.instance.EffectBgm(false);
 
+        healthBar.SetActive(true);
         rect.localScale = Vector3.zero;
-
+// #. 선택을 완료 했다면 게임을 진행
         GameManager.instance.Resume();
     }
 

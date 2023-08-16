@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. Hand 클래스 : 플레이어의 무기를 보여주고 반전시키는 기능
 public class Hand : MonoBehaviour
 {
     public bool isLeft;

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. AudioManager 클래스 : 게임이 진행될 떄 BGM 실행, 효과음 발생 순간 빈 플레이어에 클립을 끼어 넣어 실행
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;

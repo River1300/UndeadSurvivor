@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-// #. Item
+// #. Item 클래스 : Item 커맨드 센터
 //  ItemData를 받아서 플레이어가 착용한 아이템의 상태를 HUD로 표시하는 역할
 //  ItemData를 받아서 플레이어가 획득한 아이템을 Weapon || Gear 클래스에게 알려주는 역할
 //  ItemData를 받아서 플레이어가 착용한 아이템의 레벨업을 Weapon || Gear 클래스에게 알려주는 역할
@@ -33,6 +33,7 @@ public class Item : MonoBehaviour
 
     void OnEnable()
     {
+// #. 플레이어가 레벨업을 할 때 화면 활성화되는 아이템의 속성을 타입에 따라 출력
         textLevel.text = "Lv." + (level + 1);
 
         switch(data.itemType)
@@ -63,6 +64,8 @@ public class Item : MonoBehaviour
 
     public void OnClick()
     {
+// #. 사용자가 버튼을 클릭하거나 혹은 게임 매니저가 호출
+//      => Weapon or Gear 를 생성하거나 레벨업 시킨다.
         switch(data.itemType)
         {
         case ItemData.ItemType.Melee:

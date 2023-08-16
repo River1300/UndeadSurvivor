@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. Character 클래스 : 캐릭터의 능력 보정을 조정
 public class Character : MonoBehaviour
 {
     public static float Speed

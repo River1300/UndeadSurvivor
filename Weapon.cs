@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. Weapon 클래스 : 무기의 공격 방식과 무기의 속성을 관리
 public class Weapon : MonoBehaviour
 {
     public int id;
@@ -10,19 +11,18 @@ public class Weapon : MonoBehaviour
     public float damage;
     public float speed;
 
-    Player player;
-    Vector3 initPos;
-
     float timer;
     float moveDistance = 3.0f;
     float curDistance;
-    bool moveU;
-
     float thrustDistance = 2.0f;
     float thrustSpeed = 20.0f;
     float returnSpeed = 5.0f;
     bool isThrust;
     bool isFlipX;
+    bool moveU;
+
+    Player player;
+    Vector3 initPos;
 
     void Awake()
     {
@@ -96,6 +96,7 @@ public class Weapon : MonoBehaviour
 
     public void Init(ItemData data) // #1. 초기화
     {
+// #. Item 클래스로 부터 아이템 정보를 전달 받으면 현재 생성된 아이템에 해당 정보를 배정
         name = "Weapon " + data.itemId;
         transform.parent = player.transform;
         transform.localPosition = Vector3.zero; // 1. 플레이어 오브젝트의 자식으로 무기를 등록
@@ -139,6 +140,7 @@ public class Weapon : MonoBehaviour
             break;
         }
 
+// #. Player 클래스의 Hand 속성을 받아와서 -> 아이템 데이터에 등록된 스프라이트 적용 -> 게임 오브젝트 활성화
         Hand hand = player.hands[(int)data.itemType];
         hand.spriteRenderer.sprite = data.hand;
         hand.gameObject.SetActive(true);
@@ -148,6 +150,7 @@ public class Weapon : MonoBehaviour
 
     public void LevelUp(float damage, int count)    // #4. 업그레이드
     {
+// #. Item 클래스로 부터 증가한 속성을 전달 받아 현재 무기에 적용
         this.damage = damage + Character.WeaponDamage;
         this.count += count;    // 1. Item 클래스가 전달해준 값으로 데미지와 (갯수 || 관통력) 을 증가
 
@@ -177,6 +180,7 @@ public class Weapon : MonoBehaviour
     {
         for(int i = 0; i < count; i++)  // 1. 속성의 갯수 만큼 만들어 배치한다.
         {
+// #. 만들어진 Weapon 오브젝트의 자식으로 무기 본체를 PoolManager로 부터 받는다.
             Transform bullet;
 
             if(i < transform.childCount)    // 2. 이미 만들어져 있는 근접 무기가 있다면 그걸 사용
@@ -195,7 +199,7 @@ public class Weapon : MonoBehaviour
             Vector3 rotVec = Vector3.forward * 360 * i / count;
             bullet.Rotate(rotVec);
             bullet.Translate(bullet.up * 1.5f, Space.World);    // 5. 무기 회전
-
+// #. 무기 본체를 초기화
             bullet.GetComponent<Bullet>().Init(damage, -100, Vector3.zero);
         }
     }

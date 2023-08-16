@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// #. HUD 클래스 : 인게임 UI에 실시간으로 정보를 갱신하여 출력하는 역할
 public class HUD : MonoBehaviour
 {
     public enum InfoType { Exp, Level, Kill, Time, Health }
@@ -19,6 +20,7 @@ public class HUD : MonoBehaviour
 
     void LateUpdate()
     {
+// #. GameManager로 부터 플레이어의 정보를 받아와 UI에 맞게 변환하여 출력
         switch(type)
         {
         case InfoType.Exp:

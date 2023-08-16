@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. Bullet 클래스 : 충돌의 주체, 생성과 소멸을 담당
 public class Bullet : MonoBehaviour
 {
     public int per;

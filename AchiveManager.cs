@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. AchiveManager 클래스 : 업적을 관리하고 캐릭터를 해금하는 역할
 public class AchiveManager : MonoBehaviour
 {
     enum Achive { UnlockPuple, UnlockOrange }

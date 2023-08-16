@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
 
+// #. GameManager 클래스 : 플레이어 + 풀 클래스를 다른 클래스들에게 공유하고 게임을 조정
 public class GameManager : MonoBehaviour
 {
     [Header("----- Game Control -----")]
@@ -33,6 +34,7 @@ public class GameManager : MonoBehaviour
 
     void Awake()
     {
+// #. 게임 매니저 자신을 스태틱 변수로 만든다.
         instance = this;
 
         Application.targetFrameRate = 60;
@@ -56,6 +58,10 @@ public class GameManager : MonoBehaviour
 
     public void GameStart(int id)
     {
+// #. 사용자가 캐릭터 버튼을 클릭하면 해당 버튼에 등록되어 있는 캐릭터ID를 받는다.
+//      => 캐릭터ID를 현재 플레이어ID로 저장
+//      => Player 클래스에서 플레이어ID를 받아 외형을 지정
+//      => Character 클래스에서 플레이어ID를 받아 특수 능력을 지정
         playerID = id;
         isLive = true;
         health = maxHealth;
@@ -80,11 +86,13 @@ public class GameManager : MonoBehaviour
 
     public void GameOver()
     {
+// #. 플레이어가 죽으면 Player 클래스에서 호출하여 게임 오버를 실행한다.
         StartCoroutine(GameOverRoutine());
     }
 
     public void GetExp()
     {
+// #. 몬스터가 죽으면 Enemy 클래스에서 호출하여 경험치를 증가 시키고 스킬 레벨업 UI를 출력
         if(!isLive) return;
 
         exp++;

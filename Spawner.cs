@@ -2,16 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// #. Spawner 클래스 : 소환과 관련된 기능을 관리
 public class Spawner : MonoBehaviour
 {
     public Transform[] spawnPoint;
     public SpawnData[] spawnData;
 
     public float levelTime;
-
-    int level;
-
     float timer;
+    int level;
 
     void Awake()
     {
@@ -38,6 +37,9 @@ public class Spawner : MonoBehaviour
 
     void Spawn()
     {
+// #. PoolManager 클래스로 부터 몬스터 인스턴스를 받는다.
+//      => 랜덤한 몬스터를 지정하고 해당 몬스터의 정보를 Enemy 클래스 초기화 함수로 전달
+//      => 랜덤한 위치에 소환
         GameObject enemy = GameManager.instance.pool.Get(0);
 
         int enemyLevel = GetLevel(level);
@@ -83,6 +85,7 @@ public class Spawner : MonoBehaviour
     }
 }
 
+// #. SpawnData 클래스 : 몬스터의 정보
 [System.Serializable]
 public class SpawnData
 {
