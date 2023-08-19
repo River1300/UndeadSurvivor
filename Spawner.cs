@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
+using System.Resources;
 
 // #. Spawner 클래스 : 소환과 관련된 기능을 관리
 public class Spawner : MonoBehaviour
@@ -8,14 +10,22 @@ public class Spawner : MonoBehaviour
     public Transform[] spawnPoint;
     public SpawnData[] spawnData;
 
+    public List<SpawnData> spawnList;
+    public int spawnIndex;
+    public bool spawnEnd;
+
     public float levelTime;
     float timer;
     int level;
+    int[] ranNum;
 
     void Awake()
     {
+        spawnList = new List<SpawnData>();
         spawnPoint = GetComponentsInChildren<Transform>();
         levelTime = GameManager.instance.maxGameTime / spawnData.Length;
+
+        ranNum = new int[] { 3, 6, 9, 12, 15 };
     }
 
     void Update()
@@ -26,12 +36,70 @@ public class Spawner : MonoBehaviour
             level = Mathf.Min(Mathf.FloorToInt(
                 GameManager.instance.gameTime / levelTime), spawnData.Length - 1);
 
+            if(!spawnEnd)
+            {
+                if(timer > spawnList[spawnIndex].spawnTime)
+                {
+                    SpecialSpawn();
+
+                    timer = 0;
+                }
+            }
+
             if(timer > spawnData[level].spawnTime)
             {
                 Spawn();
 
                 timer = 0;
             }
+        }
+    }
+
+    public void ReadSpawnFile(int playerLevel)
+    {
+        if(playerLevel % 3 != 0) return;
+        if(playerLevel > 15)
+        {
+            int randomIndex = Random.Range(0, ranNum.Length);
+            playerLevel = ranNum[randomIndex];
+        }
+
+        spawnList.Clear();
+        spawnIndex = 0;
+        spawnEnd = false;
+
+        TextAsset textFile = Resources.Load("Level" + playerLevel) as TextAsset;
+        StringReader stringReader = new StringReader(textFile.text);
+
+        while(stringReader != null)
+        {
+            string line = stringReader.ReadLine();
+
+            if(line == null) break;
+
+            SpawnData SPData = new SpawnData();
+            SPData.spriteType = int.Parse(line.Split(',')[0]);
+            SPData.spawnTime = float.Parse(line.Split(',')[1]);
+            SPData.health = int.Parse(line.Split(',')[2]);
+            SPData.speed = float.Parse(line.Split(',')[3]);
+            SPData.spPoint = int.Parse(line.Split(',')[4]);
+            spawnList.Add(SPData);
+        }
+
+        stringReader.Close();
+    }
+
+    void SpecialSpawn()
+    {
+        GameObject enemy = GameManager.instance.pool.Get(0);
+
+        enemy.GetComponent<Enemy>().Init(spawnList[spawnIndex]);
+        enemy.transform.position = spawnPoint[spawnList[spawnIndex++].spPoint].position;
+
+        if(spawnIndex == spawnList.Count)
+        {
+            spawnEnd = true;
+            spawnIndex -= 1;
         }
     }
 
@@ -93,4 +161,5 @@ public class SpawnData
     public float spawnTime;
     public int health;
     public float speed;
+    public int spPoint;
 }

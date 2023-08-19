@@ -7,6 +7,7 @@ using UnityEngine.SceneManagement;
 // #. GameManager 클래스 : 플레이어 + 풀 클래스를 다른 클래스들에게 공유하고 게임을 조정
 public class GameManager : MonoBehaviour
 {
+    public static GameManager instance;
     [Header("----- Game Control -----")]
     public int[] nextExp = {10, 30, 50, 100, 200};
     public float maxGameTime = 2 * 10.0f;
@@ -23,7 +24,6 @@ public class GameManager : MonoBehaviour
     public float health;
     
     [Header("----- Game Object -----")]
-    public static GameManager instance;
     public PoolManager pool;
     public Player player;
     public LevelUp uiLevelUp;
@@ -31,6 +31,7 @@ public class GameManager : MonoBehaviour
     public GameObject nuclear;
     public Transform uiJoy;
     public Volume volume;
+    public Spawner spawner;
 
     void Awake()
     {
@@ -102,6 +103,7 @@ public class GameManager : MonoBehaviour
             exp = 0;
             level++;
             uiLevelUp.Show();
+            spawner.ReadSpawnFile(level);
         }
     }
 
