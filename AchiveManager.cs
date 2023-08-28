@@ -2,25 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
+using UnityEngine.SocialPlatforms.Impl;
 
 // #. AchiveManager 클래스 : 업적을 관리하고 캐릭터를 해금하는 역할
 public class AchiveManager : MonoBehaviour
 {
-    enum Achive { UnlockPuple, UnlockOrange }
-
     public GameObject[] lockCharacter;
     public GameObject[] unlockCharacter;
     public GameObject uiNotice;
 
-    Achive[] achives;
+    public AchiveData achiveData = new AchiveData();
     WaitForSecondsRealtime wait;
 
     void Awake()
     {
-        achives = (Achive[])Enum.GetValues(typeof(Achive)); // Enum의 모든 데이터를 받아 온다.
         wait = new WaitForSecondsRealtime(5);
-
-        if(!PlayerPrefs.HasKey("MyData")) Init();
     }
 
     void Start()
@@ -30,44 +27,48 @@ public class AchiveManager : MonoBehaviour
 
     void LateUpdate()
     {
-        foreach(Achive achive in achives)
+        for(int i = 0; i < achiveData.checkAchive.Length; i++)
         {
-            CheckAchive(achive);
+            string achiveStr = "";
+
+            switch(i)
+            {
+            case 0:
+                achiveStr = "UnlockPuple";
+                break;
+            case 1:
+                achiveStr = "UnlockOrange";
+                break;
+            default:
+                break;
+            }
+
+            CheckAchive(i, achiveStr);
         }
     }
 
-    void Init()
-    {
-        PlayerPrefs.SetInt("MyData", 1);
-
-        foreach(Achive achive in achives)
-        {
-            PlayerPrefs.SetInt(achive.ToString(), 0);
-        }
-    }
-
-    void CheckAchive(Achive achive)
+    void CheckAchive(int index, string achiveStr)
     {
         bool isAchive = false;
 
-        switch(achive)
+        switch(achiveStr)
         {
-        case Achive.UnlockPuple:
+        case "UnlockPuple":
             isAchive = GameManager.instance.kill >= 100;
             break;
 
-        case Achive.UnlockOrange:
+        case "UnlockOrange":
             isAchive = GameManager.instance.gameTime == GameManager.instance.maxGameTime;
             break;
         }
 
-        if(isAchive && PlayerPrefs.GetInt(achive.ToString()) == 0)
+        if(isAchive && !achiveData.checkAchive[index])
         {
-            PlayerPrefs.SetInt(achive.ToString(), 1);
+            achiveData.checkAchive[index] = isAchive;
 
             for(int i = 0; i < uiNotice.transform.childCount; i++)
             {
-                bool isActive = i == (int)achive;
+                bool isActive = achiveData.checkAchive[i];
                 uiNotice.transform.GetChild(i).gameObject.SetActive(isActive);
             }
 
@@ -75,12 +76,21 @@ public class AchiveManager : MonoBehaviour
         }
     }
 
+    public AchiveData GetAchiveData()
+    {
+        return achiveData;
+    }
+    public void SetAchiveData(AchiveData newData)
+    {
+        achiveData = newData;
+        UnlockCharacter();
+    }
+
     void UnlockCharacter()
     {
         for(int i = 0; i < lockCharacter.Length; i++)
         {
-            string achiveName = achives[i].ToString();
-            bool isUnlock = PlayerPrefs.GetInt(achiveName) == 1;
+            bool isUnlock = achiveData.checkAchive[i];
 
             lockCharacter[i].SetActive(!isUnlock);
             unlockCharacter[i].SetActive(isUnlock);
@@ -96,5 +106,22 @@ public class AchiveManager : MonoBehaviour
         yield return wait;
 
         uiNotice.SetActive(false);
+    }
+}
+
+[System.Serializable]
+public class AchiveData
+{
+    public int checkAchiveCount;
+    public bool[] checkAchive;
+    public bool unlockPuple;
+    public bool unlockOrange;
+
+    public AchiveData()
+    {
+        checkAchiveCount = 2;
+        checkAchive = new bool[checkAchiveCount];
+        checkAchive[0] = unlockPuple;
+        checkAchive[1] = unlockOrange;
     }
 }

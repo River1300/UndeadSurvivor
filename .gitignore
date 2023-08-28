@@ -19,3 +19,6 @@ Result.cs.meta
 Character.cs.meta
 AchiveManager.cs.meta
 AudioManager.cs.meta
+DataManager.cs.meta
+OpenData.cs.meta
+SaveLoad.cs.meta

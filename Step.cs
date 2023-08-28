@@ -1873,3 +1873,91 @@ ItemData -> Item --> Weapon --> Bullet
         [f]. 아더 세팅 -> 스크립트 백렌드를 IL2CPP로 지정하여 64비트로
             ARM64 체크
 */
+
+/* Json( JavaScript Object Notation ) */
+
+/*
+경량의 데이터 교환 형식( 단순한 구조와 규칙을 사용하여 디자인 )으로, 
+사람과 기계 모두 이해하기 쉬운 형태로 데이터를 표현하는 방법 
+주로 텍스트 기반 형태로 사용되며, 데이터를 key-value 쌍으로 표현하고, 
+객체와 배열을 중첩하여 복잡한 구조의 데이터를 표현할 수 있다. 
+JSON은 프로그래밍 언어나 플랫폼에 독립적이며, 
+네트워크에서 데이터 교환 및 저장 등 다양한 용도로 사용된다.
+*/
+
+/* PlayerPrefs : Json */
+
+/*
+PlayerPrefs 의 장점:
+    1. 유니티에 내장되어 있다.
+    2. 직관적이고 간단한 함수의 형태
+    3. Dictionery와 비슷한 형태
+PlayerPrefs 의 단점:
+    1. 저장할 수 있는 자료형이 제한적이다.( int, float, string )
+    2. 각각의 변수들을 함수를 사용하여 하나씩 저장과 불러오기를 해야 한다.
+*/
+
+/*
+Json 의 장점:
+    1. 저장시키고 불러올 수 있는 자료형이 다양하다.
+    2. 암호화가 가능하다.
+Json 의 단점:
+    1. 저장과 불러오기를 코드로 구현해야 된다.
+*/
+
+/*
+PlayerPrefs는 간단한 "키-값" 저장소로 작은 규모의 데이터를 로컬에 저장하고 불러올 때 유용하다.
+그러나 PlayerPrefs는 주로 작은 양의 데이터를 저장하기에 적합하며, 
+복잡한 데이터 구조나 대량의 데이터를 저장하거나 관리하는 데는 적합하지 않을 수 있다. 
+
+JSON을 사용하는 것이 유용한 이유
+    구조화된 데이터 : JSON은 복잡한 데이터 구조를 표현하기에 용이 
+            => 복합적인 계층 구조나 배열 등을 JSON으로 표현하면 데이터를 조직적으로 저장할 수 있다.
+    대량의 데이터 : JSON은 대량의 데이터를 효율적으로 저장하고 관리하는 데 적합 
+            => PlayerPrefs는 데이터 양이 많아질수록 성능에 영향을 미칠 수 있으나, 
+            => JSON은 이러한 상황에서 더 나은 선택일 수 있다.
+    외부 파일과의 호환성 : JSON 데이터는 텍스트 형식으로 저장되므로 외부에서도 읽고 쓰기가 용이
+            => 이는 데이터를 외부에서 수정하거나 백업 및 복구할 때 유용하다.
+    서버와의 통신 : JSON은 웹 서버와의 데이터 교환에서 주로 사용되는 형식 중 하나 
+            => UnityWebRequest와 같은 기능을 사용하여 서버와 통신할 때 JSON 형식을 사용하면 
+            => 데이터 교환과 처리가 편리해진다.
+    유연한 데이터 처리 : JSON은 "키-값" 쌍을 사용하여 데이터를 저장하므로 
+            => 다양한 유형의 데이터를 유연하게 처리할 수 있다. 
+            => PlayerPrefs는 기본적으로 문자열 값만 저장하므로 
+            => 복잡한 데이터 처리에는 한계가 있을 수 있다.
+
+데이터 양이 많거나 구조가 복잡한 경우에는 JSON을 사용하여 데이터를 저장하고 관리하는 것이 더 효율적
+*/
+
+/*
+Json : 저장할 내용( 사용자 이름, 저장한 시간, 업적 달성도 )
+
+1. 저장 데이터 구조 설계
+    => 저장 데이터는 사용자 이름, 저장한 시간, 달성한 업적, 이 세 가지 항목으로 구성 된다.
+    {
+        "username": "River",
+        "saveTime": "2023-08-27T15:30:00",
+        "achieves": ["UnlockPuple", "UnlockOrange"]
+    }
+2. 저장 데이터 저장
+    => 저장 데이터를 Json 형식으로 변환
+    => 저장 데이터를 Json 파일에 저장
+    {
+        string json = JsonUtility.ToJson(saveData);
+        string path = Application.persistentDataPath + "/save";
+        File.WriteAllText(path + slotNum.ToString(), json);
+    }
+3. 저장 데이터 불러오기
+    => Json 파일에서 저장 데이터를 가져온다.
+    => 가져온 저장 데이터를 Json 형식으로 변환한다.
+    {
+        string json = File.ReadAllText(path + slotNum.ToString());
+        SaveData saveData = JsonUtility.FromJson<SaveData>(json);
+    }
+4. 저장 슬롯에 저장 데이터 표시
+    => 저장 슬롯에 사용자 이름과 저장한 시간을 표시
+    {
+        labelUserName.text = saveData.username;
+        labelSaveTime.text = saveData.saveTime;
+    }
+*/
