@@ -1961,3 +1961,114 @@ Json : 저장할 내용( 사용자 이름, 저장한 시간, 업적 달성도 )
         labelSaveTime.text = saveData.saveTime;
     }
 */
+
+/*
+데이터 관리자
+
+1. 저장할 데이터를 클래스 혹은 구조체로 만든다.
+    SaveData
+    {
+        1. 이름과 시간
+        public string username;
+        public string saveTime;
+        2. 업적 목록
+        public AchiveData achiveData;
+    }
+2. DataManager 클래스를 싱글톤 패턴으로 만든다.
+3. Json 으로의 저장/불러오기 를 작업하기 위해 SaveData 를 속성으로 갖는다.
+4. 저장 슬롯과 저장 위치를 저장하기 위한 변수를 속성으로 갖는다.
+5. Save/Load 함수를 만든다.
+    {
+        1. SaveData 를 Json 으로 변환
+        2. 지정된 위치에 슬롯 이름으로 저장
+    }
+    {
+        1. 지정된 위치에 슬롯 이름을 불러오기
+        2. 불러온 Json 을 SaveData 로 변환하여 SaveData 속성에 배정
+    }
+*/
+
+/*
+오프너
+
+1. 저장, 불러오기, 이름작성, 알림 UI를 속성으로 받는다.
+2. 저장 UI 활성화 함수를 만든다.
+3. 불러오기 UI 활성화 함수를 만든다.
+4. 이름작성 UI 활성화 함수를 만든다.
+5. 알림 UI 활성화 함수를 만든다.
+*/
+
+/*
+저장/불러오기 UI의 기능
+
+1. 저장 슬롯에 표시할 텍스트 공간을 속성으로 받는다.
+2. 입력 받은 사용자 이름을 받을 텍스트 공간을 속성으로 받는다.
+3. 저장 슬롯에 이미 저장된 파일이 있는지 확인할 불리언 속성을 만든다.
+4. UI에 저장된 파일 정보를 출력해 주는 함수를 만든다.
+    {
+        1. 반복문을 돌며 저장 슬롯에 정보 표시
+        2. 저장된 파일이 있는지 확인
+        if(File.Exists(DataManager.instance.path + $"{i}"))
+        3. 저장된 파일이 있으므로 불리언 속성에 true 배정
+        4. 슬롯 번호를 지정해 준 뒤에 Json 을 불러와 SaveData에 배정
+        5. 받은 정보로 사용자 이름과 저장 시간을 UI 에 표시
+    }
+5. 저장 슬롯 하나를 선택했을 때의 기능 함수를 만든다.
+    {
+        1. 매개 변수로 슬롯 번호를 받는다.
+        2. 슬롯 번호를 배정한다.
+        3. 해당 슬롯이 저장 파일이 있는 슬롯일 경우 알림 UI를 띄운다.
+            => 만약 사용자가 알림 UI에서 저장 덮어씌우기 할 경우 확인 버튼에 이름작성 UI 연결
+        4. 해당 슬롯에 저장 파일이 없다면 이름작성 UI 를 띄운다.
+    }
+6. 불러오기 슬롯 하나를 선택했을 때의 기능 함수를 만든다.
+    {
+        1. 매개 변수로 슬롯 번호를 받는다.
+        2. 슬롯 번호를 배정한다.
+        3. Json 을 불러온다.
+        4. 불러온 SaveData의 업적 정보를 현재 업적 정보에 배정
+    }
+7. 이름작성 UI 에서 확인 버튼을 눌렀을 때 현재 플레이어 정보를 저장할 함수를 만든다.
+    {
+        1. 현재 시간을 받는다.
+        DateTime now = DateTime.Now;
+        2. 사용자 이름을 입력 받은 텍스트로 배정
+        DataManager.instance.data.username = newPlayerName.text;
+        3. 현재 시간을 배정
+        DataManager.instance.data.saveTime = now.ToString("H:m");
+        4. 업적 배정
+        DataManager.instance.data.achiveData = DataManager.instance.achive.GetAchiveData();
+        5. SaveData 에 값을 넣었다면 Json 으로 저장
+        DataManager.instance.SaveData();
+        6. 저장하기 UI 를 다시 그리기
+    }
+8. 불러온 Josn 을 현재 플레이어 업적에 배정하는 함수를 만든다.
+*/
+
+/*
+AchiveManager
+
+1. 업적에서 저장할 부분을 클래스로 만든다.
+    => 업적 불리언 속성
+    => 업적 불리언 속성을 담을 불리언 배열 속성
+    => 배열의 크기를 지정한 정수형 속성
+    => 기본 생성자를 만들어서 속성을 초기화 한다.
+2. AchiveManager 클래스에 업적 Data 를 속성으로 만든다.
+    public AchiveData achiveData = new AchiveData();
+3. 업적의 달성 여부를 확인할 함수를 만든다.
+    void CheckAchive(int index, string achiveStr) 배열 번호를 매개변수로 받는다.
+        => 업적은 여러 종류가 있고, 이를 구분하기 위해 문자열 매개변수를 받는다.
+    {
+        1. 업적 달성 여부를 저장할 임시 불리언 변수를 만든다.
+        2. switch 문으로 업적 별로 달성 여부를 확인
+        3. 업적을 달성 하였고 && 해당 업적 Data 가 미달성 상태일 경우
+        {
+            1. 업적 Data 를 달성 상태로 바꾼다.
+            achiveData.checkAchive[index] = isAchive;
+            2. 반복문을 돌면서 업적 달성 UI 중 알맞는 UI 를 활성화 한다.
+        }
+    }
+4. LateUpdate 함수에서 업적 Data 의 길이만큼 반복문을 돌며 업적 이름을 문자열로 저장한다.
+5. CheckAchive 함수 호출
+6. 업적 Data Getter/Setter 생성
+*/
